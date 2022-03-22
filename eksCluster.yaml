@@ -4,9 +4,15 @@ kind: ClusterConfig
 metadata:
   name: fargate-flux-test
   region: us-east-2
-  version: 1.21
+  version: "1.21"
 iam:
   withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: efs-csi-controller-sa
+        namespace: kube-system
+      attachPolicyARNs: 
+        - arn:aws:iam::365268860483:policy/AmazonEKS_EFS_CSI_Driver_Policy
 fargateProfiles:
   - name: fp-default
     selectors:
@@ -17,9 +23,9 @@ gitops:
   flux:
     gitProvider: github
     flags:
-      owner: "Walker"
-      repository: 
-      private: false
+      owner: "walkermiller"
+      repository: "eks-sample-deploy"
+      private: "false"
       branch: main
       namespace: flux-system
       path: clusters/test-cluster
